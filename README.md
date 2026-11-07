@@ -12,6 +12,18 @@ and GraphRAG retrieves a connected neighborhood of facts to answer from.
 
 > All sample data is **synthetic** — no real patient data / PHI.
 
+## Stack
+
+- **Backend:** FastAPI (an async Flask-equivalent — it serves the HTTP API and
+  auto-generates interactive docs at `/docs`).
+- **Frontend:** a lightweight browser chat UI (`web/`, plain HTML + JS) served by
+  FastAPI at `/` — this is where a user types questions and reads answers.
+- **Model:** Ollama (local LLM), with a deterministic offline fallback.
+- **Deploy:** single Docker image, or `docker compose` (API + Ollama). See
+  [DEPLOYMENT.md](DEPLOYMENT.md).
+
+Open **<http://localhost:8000>** for the UI once running.
+
 ## How GraphRAG works here
 
 ```

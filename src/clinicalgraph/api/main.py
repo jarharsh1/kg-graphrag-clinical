@@ -25,10 +25,12 @@ from clinicalgraph.core.pipeline import ClinicalGraphRAG
 _WEB_DIR = Path(__file__).resolve().parents[3] / "web"
 
 app = FastAPI(
-    title="Clinical Knowledge Graph QA (GraphRAG)",
+    title="GraphRAG Engine (Knowledge-Graph QA)",
     version="0.1.0",
-    description="Ollama-first GraphRAG over a clinical knowledge graph "
-    "(patients, encounters, conditions, medications, providers).",
+    description="Ollama-first, domain-agnostic GraphRAG engine: k-hop "
+    "graph-aware retrieval over a property graph. Ships with a clinical "
+    "example (patients, encounters, conditions, medications, providers); "
+    "swap the loader's records to target any other domain.",
 )
 
 _pipeline = ClinicalGraphRAG()

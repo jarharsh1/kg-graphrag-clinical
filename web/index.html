@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Clinical Knowledge Graph QA</title>
+  <style>
+    :root {
+      --bg: #0f172a; --panel: #1e293b; --accent: #38bdf8; --text: #e2e8f0;
+      --muted: #94a3b8; --border: #334155; --user: #0ea5e9; --ok: #22c55e;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+      background: var(--bg); color: var(--text); display: flex; flex-direction: column;
+      min-height: 100vh; }
+    header { padding: 16px 20px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 12px; }
+    header h1 { font-size: 18px; margin: 0; }
+    .pill { font-size: 12px; color: var(--muted); border: 1px solid var(--border);
+      padding: 2px 8px; border-radius: 999px; }
+    main { flex: 1; max-width: 820px; width: 100%; margin: 0 auto; padding: 20px;
+      display: flex; flex-direction: column; gap: 14px; }
+    .chat { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+    .msg { padding: 12px 14px; border-radius: 12px; max-width: 85%; line-height: 1.5; }
+    .msg.user { align-self: flex-end; background: var(--user); color: #04293a; }
+    .msg.bot { align-self: flex-start; background: var(--panel); border: 1px solid var(--border); }
+    .facts { margin-top: 8px; font-size: 12px; color: var(--muted); }
+    .facts summary { cursor: pointer; color: var(--accent); }
+    .facts li { margin: 2px 0; }
+    form { display: flex; gap: 8px; }
+    input { flex: 1; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border);
+      background: var(--panel); color: var(--text); font-size: 15px; }
+    button { padding: 12px 18px; border: none; border-radius: 10px; background: var(--accent);
+      color: #04293a; font-weight: 600; cursor: pointer; }
+    button:disabled { opacity: .5; cursor: default; }
+    .examples { display: flex; flex-wrap: wrap; gap: 8px; }
+    .examples button { background: transparent; border: 1px solid var(--border);
+      color: var(--muted); font-weight: 400; font-size: 13px; }
+    .hint { color: var(--muted); font-size: 13px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🩺 Clinical Knowledge Graph QA</h1>
+    <span class="pill" id="backend">backend: …</span>
+    <span class="pill" id="nodes">graph: …</span>
+  </header>
+  <main>
+    <p class="hint">Ask a question about the clinical knowledge graph (synthetic data).
+      Answers are grounded in retrieved graph facts.</p>
+    <div class="examples" id="examples">
+      <button>Which medications treat hypertension?</button>
+      <button>What conditions does Patient 001 have?</button>
+      <button>What did Dr. Rao prescribe and for which conditions?</button>
+    </div>
+    <div class="chat" id="chat"></div>
+    <form id="form">
+      <input id="q" placeholder="Ask about patients, conditions, medications…" autocomplete="off" />
+      <button id="send" type="submit">Ask</button>
+    </form>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>

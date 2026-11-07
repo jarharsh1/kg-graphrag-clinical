@@ -1,6 +1,7 @@
 """FastAPI serving layer for clinical GraphRAG.
 
 Endpoints:
+  GET  /         - the browser chat UI (static)
   GET  /health   - liveness + active backend + graph size
   POST /load      - (re)build the graph from structured records
   POST /ask       - graph-aware question answering with the retrieved facts
@@ -13,10 +14,15 @@ import sys
 from pathlib import Path
 
 from fastapi import FastAPI
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from clinicalgraph.core.backends import OllamaLLM
 from clinicalgraph.core.pipeline import ClinicalGraphRAG
+
+# Locate the bundled web UI (repo-root/web), resilient to the CWD.
+_WEB_DIR = Path(__file__).resolve().parents[3] / "web"
 
 app = FastAPI(
     title="Clinical Knowledge Graph QA (GraphRAG)",
@@ -70,3 +76,13 @@ def load(req: LoadRequest) -> LoadResponse:
 @app.post("/ask", response_model=AskResponse)
 def ask(req: AskRequest) -> AskResponse:
     return AskResponse(**_pipeline.ask(req.question, req.hops))
+
+
+# --- Browser UI ------------------------------------------------------------ #
+# Serve the static chat UI. Mounted last so it never shadows the API routes.
+if _WEB_DIR.exists():
+    app.mount("/static", StaticFiles(directory=str(_WEB_DIR)), name="static")
+
+    @app.get("/", include_in_schema=False)
+    def index() -> FileResponse:
+        return FileResponse(str(_WEB_DIR / "index.html"))

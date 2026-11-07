@@ -1,5 +1,13 @@
 """Build the clinical knowledge graph from structured records.
 
+The clinical schema below is one worked example, not a constraint: this loader
+is the only domain-specific piece of the engine. Any set of entity/relation
+records in the same shape (typed nodes with an `id`, plus edges between them)
+produces a graph the retriever and pipeline handle identically — to target
+another domain (HR, e-commerce, supply chain, research, ...), feed records in
+this shape instead. The `PropertyGraph`, k-hop retrieval, and pipeline do not
+change.
+
 Input is a dict with `patients`, `providers`, `conditions`, `medications`, and
 `encounters`. Each encounter links a patient, a provider, the conditions
 diagnosed, and the medications prescribed, producing the relations:

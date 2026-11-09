@@ -5,6 +5,7 @@ from pathlib import Path
 
 from fastapi.testclient import TestClient
 
+from clinicalgraph.api import main as api_main
 from clinicalgraph.api.main import app
 from clinicalgraph.core.loader import build_graph
 from clinicalgraph.core.retriever import match_seed_nodes, retrieve_facts
@@ -82,6 +83,12 @@ def test_fact_budget_caps_prompt_facts(monkeypatch):
     )
     out_full = rag.ask("Patient 001", hops=2)
     assert len(out_full["facts"]) > 3
+
+
+def test_sample_path_is_cwd_independent():
+    # The bundled dataset must resolve from the package location, not the CWD.
+    assert api_main._SAMPLE.is_absolute()
+    assert api_main._SAMPLE.exists()
 
 
 def test_api_health_and_ask():

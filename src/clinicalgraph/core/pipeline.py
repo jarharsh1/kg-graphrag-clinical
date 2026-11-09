@@ -42,5 +42,10 @@ class ClinicalGraphRAG:
                 "facts": [],
                 "seeds": [],
             }
+        # Fact budget: cap how many fact lines reach the prompt, so a large
+        # subgraph can't produce an unbounded prompt. Facts are already ordered
+        # most-relevant-first (seeds, then their neighbors, then relations).
+        if settings.max_facts > 0:
+            facts = facts[: settings.max_facts]
         answer = self.llm.generate(_PROMPT.format(facts="\n".join(facts), question=question))
         return {"answer": answer, "facts": facts, "seeds": seeds}
